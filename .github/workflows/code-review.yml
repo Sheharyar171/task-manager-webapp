@@ -1,0 +1,27 @@
+name: Code Review
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install dependencies
+        run: npm install
+      - name: Run linting
+        run: npm run lint
+      - name: Security scan with CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: javascript
+      - name: Analyze code
+        uses: github/codeql-action/analyze@v3

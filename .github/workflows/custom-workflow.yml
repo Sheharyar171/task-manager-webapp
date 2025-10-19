@@ -1,0 +1,26 @@
+name: Custom Workflow - Release Notes
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  notes:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Generate release notes
+        run: |
+          echo "# Release Notes - $(date)" > release-notes.md
+          echo "- Added task management features" >> release-notes.md
+          git add release-notes.md
+          git commit -m "Auto-generate release notes"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Upload notes
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-notes
+          path: release-notes.md

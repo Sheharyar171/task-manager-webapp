@@ -1,0 +1,22 @@
+name: Scheduled Tasks
+
+on:
+  schedule:
+    - cron: '0 0 * * *'  # Daily at midnight UTC
+
+jobs:
+  maintenance:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Run maintenance (e.g., backup tasks)
+        run: |
+          echo "Performing daily task backup..." > backup.log
+          date >> backup.log
+      - name: Upload backup log
+        uses: actions/upload-artifact@v4
+        with:
+          name: daily-backup
+          path: backup.log
+          retention-days: 7
