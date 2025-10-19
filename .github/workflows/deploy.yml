@@ -1,9 +1,10 @@
-name: Deployment Pipeline
+]name: Deployment Pipeline
 
 on:
   push:
     branches:
       - main
+     workflow_dispatch:
 
 jobs:
   deploy:
