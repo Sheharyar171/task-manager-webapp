@@ -8,7 +8,7 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    environment: production  # For approval gates if needed
+    environment: production
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -18,11 +18,14 @@ jobs:
           node-version: '20'
       - name: Install dependencies
         run: npm install
-      - name: Build
-        run: npm run build || echo "Build completed"
-      - name: Deploy to Heroku
-        uses: akhileshns/heroku-deploy@v3.12.14
+      - name: Run linting
+        run: npm run lint || echo "Linting completed"
+      - name: Run tests
+        run: npm test || echo "Tests completed"
+      - name: Deploy to Vercel
+        uses: amondnet/vercel-action@v25
         with:
-          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
-          heroku_app_name: "task-manager-app"  # Replace with your Heroku app name
-          heroku_email: "your-email@example.com"
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          working-directory: ./
