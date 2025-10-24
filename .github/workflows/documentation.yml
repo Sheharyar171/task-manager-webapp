@@ -25,11 +25,13 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-      - name: Build documentation (simple Markdown to HTML)
+      - name: Build documentation (Markdown to HTML)
         run: |
           cd docs
-          npm install marked  # For Markdown processing
-          node -e "const marked = require('marked'); const fs = require('fs'); fs.writeFileSync('index.html', marked(fs.readFileSync('README.md', 'utf8')));"
+          npm init -y
+          npm install marked
+          echo "const marked = require('marked'); const fs = require('fs'); marked.setOptions({}); fs.writeFileSync('index.html', marked.parse(fs.readFileSync('README.md', 'utf8')));" > generate-html.js
+          node generate-html.js
       - name: Setup Pages
         uses: actions/configure-pages@v4
       - name: Upload artifact
