@@ -25,12 +25,13 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-      - name: Build documentation (Markdown to HTML)
+      - name: Install dependencies and build documentation
         run: |
+          mkdir -p docs
           cd docs
           npm init -y
           npm install marked
-          echo "const marked = require('marked'); const fs = require('fs'); marked.setOptions({}); fs.writeFileSync('index.html', marked.parse(fs.readFileSync('README.md', 'utf8')));" > generate-html.js
+          echo "const marked = require('marked'); const fs = require('fs'); try { marked.setOptions({}); const markdown = fs.readFileSync('README.md', 'utf8'); const html = marked.parse(markdown); fs.writeFileSync('index.html', html); console.log('Documentation built successfully'); } catch (error) { console.error('Error building documentation:', error.message); process.exit(1); }" > generate-html.js
           node generate-html.js
       - name: Setup Pages
         uses: actions/configure-pages@v4
