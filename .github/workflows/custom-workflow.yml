@@ -11,5 +11,5 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Print custom message
-        run: echo "🎉 Custom workflow running successfully on Ubuntu!"
+        run: echo "Custom workflow running successfully!"
 
