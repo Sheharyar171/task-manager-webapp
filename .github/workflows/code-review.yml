@@ -4,6 +4,7 @@ on:
   pull_request:
     branches:
       - main
+  workflow_dispatch:
 
 jobs:
   review:
@@ -11,17 +12,22 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
+
       - name: Install dependencies
         run: npm install
+
       - name: Run linting
         run: npm run lint
-      - name: Security scan with CodeQL
+
+      - name: Initialize CodeQL
         uses: github/codeql-action/init@v3
         with:
           languages: javascript
-      - name: Analyze code
+
+      - name: Perform CodeQL analysis
         uses: github/codeql-action/analyze@v3
