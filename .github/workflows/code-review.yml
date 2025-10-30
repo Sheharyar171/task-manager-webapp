@@ -5,12 +5,18 @@ on:
     branches:
       - main
     paths:
-      - '**.js'                     # Run on JS file changes
-      - '.github/workflows/code-review.yml'  # Run when workflow itself changes
+      - '**.js'
+      - '.github/workflows/code-review.yml'
   pull_request:
     branches:
       - main
-  workflow_dispatch:                # Manual trigger from Actions tab
+  workflow_dispatch:
+
+permissions:
+  actions: read
+  contents: read
+  security-events: write
+  pull-requests: write
 
 jobs:
   review:
