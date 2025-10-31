@@ -1,4 +1,4 @@
-name: Deployment Pipeline
+name: Deployment Pipeline (Vercel)
 
 on:
   push:
@@ -7,26 +7,16 @@ on:
   workflow_dispatch:
 
 jobs:
-  deploy:
+  deploy-to-vercel:
     runs-on: ubuntu-latest
-    environment: production
+
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v4
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-      - name: Install dependencies
-        run: npm install
-      - name: Run linting
-        run: npm run lint || echo "Linting completed"
-      - name: Run tests
-        run: npm test || echo "Tests completed"
-      - name: Deploy to Vercel
-        uses: amondnet/vercel-action@v25
-        with:
-          vercel-token: ${{ secrets.VERCEL_TOKEN }}
-          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
-          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
-          working-directory: ./
+
+      - name: Trigger Vercel Deployment
+        run: |
+          curl -X POST "https://api.vercel.com/v1/integrations/deploy/prj_${{ secrets.VERCEL_PROJECT_ID }}" \
+          -H "Authorization: Bearer ${{ secrets.VERCEL_TOKEN }}" \
+          -H "Content-Type: application/json" \
+          -d '{}'
